@@ -164,10 +164,10 @@ class Game:
             pg.draw.rect(self.screen,ac,(x,y,w,h))
             if self.click[0]==1 and action !=None:
                 if action=="play":
-                    g.start_screen()
-                elif action=="pass":
                     g.new()
                     g.run()
+                elif action=="pass":
+                    g.start_screen()
                 elif action=="quit":
                     self.quit()
                     
@@ -184,15 +184,17 @@ class Game:
             self.background_filename = 'imagemfundo.jpg'
             self.background = pg.image.load(self.background_filename).convert() 
             self.screen.blit(self.background,[0,0])
-            self.draw_text("Deadly Koala",self.font,105,GREEN,WIDTH/2,HEIGHT/5,align="center")
+            self.draw_text("Tech attack",self.font,90,GREEN,WIDTH/2,HEIGHT/5,align="center")
             
-            self.button("Survive",200,400,100,50,RED,BRIGHT_RED,"play")
+            self.button("viver",200,400,100,50,RED,BRIGHT_RED,"pass")
             
-            self.button("Leave",200,550,100,50,BLUE,BRIGHT_BLUE,"quit")
-            
+            self.button("partir",200,550,100,50,BLUE,BRIGHT_BLUE,"quit")
             
             pg.display.update()
-            self.clock.tick(15)
+            
+            
+            
+            
         
     def run(self):
         #Game loop
@@ -269,7 +271,7 @@ class Game:
             self.render_fog()
         draw_player_health(self.screen,WIDTH-120,60,self.player.health/PLAYER_HEALTH)
         #draw_player_food(self.screen,10,10,self.player.health/PLAYER_HEALTH)
-        self.draw_text('Inimies:{}'.format(len(self.mobs)),self.hud_font,30,WHITE,WIDTH-10,10,align="ne")
+        self.draw_text('techs:{}'.format(len(self.mobs)),self.hud_font,30,WHITE,WIDTH-10,10,align="ne")
         self.paper='papel.png'
         self.paper1 = pg.image.load(self.paper).convert()
         self.paper1=pg.transform.scale(self.paper1,(200,200))
@@ -303,18 +305,34 @@ class Game:
     def start_screen(self):
         self.story_game = 'papel.png'
         self.story = pg.image.load(self.story_game).convert() 
+        self.story = pg.transform.scale(self.story,(WIDTH,HEIGHT))
         self.screen.blit(self.story,[0,0])
-        self.draw_text("AO ACORDAR UM DIA, PERCEBEU QUE ESTAVA SOZINHO E TODOS OS ELETRÔNICOS TINHAM GANHADO VIDA PRÓPRIA",self.font,50,BLACK,WIDTH/2,HEIGHT/2,align="center")
-        self.button("Proxímo",200,400,100,50,RED,BRIGHT_RED,"pass")
+        self.draw_text("''AO ACORDAR UM DIA, PERCEBEU QUE ESTAVA SOZINHO ",self.font,30,BLACK,WIDTH/2,150,align="center")
+        self.draw_text("E TODOS OS ELETRÔNICOS TINHAM GANHADO ",self.font,30,BLACK,WIDTH/2,200,align="center")
+        self.draw_text("VIDA PRÓPRIA e estavam atacando. Então",self.font,30,BLACK,WIDTH/2,250,align="center")
+        self.draw_text("SE AUSENTOU NO CAMPO, LONGE DA tecnologia",self.font,30,BLACK,WIDTH/2,300,align="center")
+        self.draw_text("Mas ainda restavam 'techs' ",self.font,30,BLACK,WIDTH/2,350,align="center")
+        self.draw_text("o objetivo é sobreviver e derrotar todas as 'techs'",self.font,30,BLACK,WIDTH/2,400,align="center")
+        self.draw_text("para que as pessoas aparecam novamente.'' ",self.font,30,BLACK,WIDTH/2,450,align="center")
+        self.draw_text("Conte com o seu DIario de bordo e relógio.",self.font,30,BLACK,WIDTH/2,550,align="center")
+        start=True
+        while start:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type==pg.QUIT:
+                    start=False
+                    self.quit()
+            self.button("Próximo",450,650,150,50,GREEN,BRIGHT_GREEN,"play")   
+            pg.display.update()
+            pg.display.flip()
         
     def show_go_screen(self):
         self.screen.fill(BLACK)
-        self.draw_text("GAME OVER",self.font,100,RED,WIDTH/2,HEIGHT/2,align="center")
-        self.draw_text("Skip",self.font,75,WHITE,WIDTH/2,HEIGHT*3/4,align="center")
+        self.draw_text("GAME OVER",self.font,100,RED,WIDTH/2,HEIGHT/4,align="center")
+        self.draw_text("Aperte espaco para voltar para o menu",self.font,40,WHITE,WIDTH/2,HEIGHT/2,align="center")
         pg.display.flip()
         self.wait_for_key()
     def wait_for_key(self):
-        pg.event.wait()
         waiting=True
         while waiting:
             self.clock.tick(FPS)
@@ -322,8 +340,9 @@ class Game:
                 if event.type==pg.QUIT:
                     waiting=False
                     self.quit()
-                if event.type==pg.KEYUP:
-                    waiting=False
+                if event.type==pg.KEYDOWN:
+                    if event.key==pg.K_SPACE:
+                        waiting=False
 g=Game()    
 while True:
    g.menu()
