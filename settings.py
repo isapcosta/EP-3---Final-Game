@@ -68,16 +68,14 @@ BG_MUSIC='birdsongloop16s.ogg'
 PLAYER_HIT_SOUNDS=['gruntsound.wav']
 ZOMBIE_MOAN_SOUNDS=['brains.wav','groan.wav','creepy_mouth_breathing.wav','rar.wav']
 ZOMBIE_HIT_SOUNDS=['thud.wav']
-WEAPON_SOUNDS_GUN=['Unkown.wav','22 Pistol.wav']
+WEAPON_SOUNDS_GUN=['gun1.wav','gun2.wav']
 EFFECTS_SOUNDS={'level_start':'levelup.wav','health_up':'levelup.wav'}
 
 NIGHT_COLOR=(20,20,20)
 LIGHT_RADIUS=(500,500)
 LIGHT_MASK="light_350_med.png"
 
-
-
-
+HEART_SOUNDS=["heart.wav"]
 
 
 

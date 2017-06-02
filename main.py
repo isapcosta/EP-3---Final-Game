@@ -6,6 +6,7 @@ Created on Fri May 19 00:02:08 2017
 """
 
 import pygame as pg
+import time
 import random
 from os import path
 import sys
@@ -17,6 +18,7 @@ import pytmx
 from pytmx import load_pygame
 
 def draw_player_health(surf,x,y,pct):
+
     if pct<0:
         pct=0
     BAR_LENGTH=100
@@ -32,6 +34,7 @@ def draw_player_health(surf,x,y,pct):
         col=RED
     pg.draw.rect(surf,col,fill_rect)
     pg.draw.rect(surf,WHITE,outline_rect,2)
+    
 class Game:
     def __init__(self):
         #initialize game window
@@ -120,6 +123,10 @@ class Game:
         for snd in ZOMBIE_HIT_SOUNDS:
             s=pg.mixer.Sound(path.join(music_folder,snd))
             self.zombie_hit_sounds.append(s)
+        self.heart_sounds=[]
+        for snd in HEART_SOUNDS:
+            s=pg.mixer.Sound(path.join(music_folder,snd))
+            self.heart_sounds.append(s)
    
     def new (self):
         #start a new self.player_img=pg.image.load(path.join(img_folder,PLAYER_IMG)).convert_alpha()game
@@ -131,6 +138,7 @@ class Game:
         self.map=TiledMap(path.join(self.map_folder,'level1.tmx'))
         self.map_img=self.map.make_map()
         self.map_rect=self.map_img.get_rect()
+        
         
        # for row,tiles in enumerate(self.map.data):
         #    for col,tile in enumerate(tiles):
@@ -168,6 +176,8 @@ class Game:
                     g.run()
                 elif action=="pass":
                     g.start_screen()
+                elif action=="menu":
+                    g.menu()
                 elif action=="quit":
                     self.quit()
                     
@@ -274,11 +284,12 @@ class Game:
         self.draw_text('techs:{}'.format(len(self.mobs)),self.hud_font,30,WHITE,WIDTH-10,10,align="ne")
         self.paper='papel.png'
         self.paper1 = pg.image.load(self.paper).convert()
-        self.paper1=pg.transform.scale(self.paper1,(200,200))
+        self.paper1=pg.transform.scale(self.paper1,(200,250))
         self.screen.blit(self.paper1,[10,10])
         self.draw_text('space- attack'.format(len(self.mobs)),self.hud_font,20,BLACK,110,50,align="center")
         self.draw_text('N- Night'.format(len(self.mobs)),self.hud_font,20,BLACK,100,100,align="center")
         self.draw_text('P- Pause'.format(len(self.mobs)),self.hud_font,20,BLACK,100,150,align="center")
+        self.draw_text('M- Menu'.format(len(self.mobs)),self.hud_font,20,BLACK,100,200,align="center")
         if self.paused:
             self.screen.blit(self.dim_screen,(0,0))
             self.draw_text("Estagnado",self.font,105,RED,WIDTH/2,HEIGHT/2,align="center")
@@ -302,6 +313,9 @@ class Game:
                     self.paused=not self.paused
                 if event.key==pg.K_n:
                     self.night=not self.night
+                if event.key==pg.K_m:
+                    self.playing=False
+                    g.menu()
     def start_screen(self):
         self.story_game = 'papel.png'
         self.story = pg.image.load(self.story_game).convert() 
@@ -343,6 +357,7 @@ class Game:
                 if event.type==pg.KEYDOWN:
                     if event.key==pg.K_SPACE:
                         waiting=False
+                        g.menu()
 g=Game()    
 while True:
    g.menu()
